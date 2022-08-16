@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiDemoApp.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
 
@@ -11,6 +12,12 @@ namespace ApiDemoApp.Controllers
 	[ApiController]
 	public class HomeController : ControllerBase
 	{
+		private readonly IHomeServices homeServices;
+		public HomeController(IHomeServices _homeServices)
+		{
+                homeServices = _homeServices;
+		}
+
         [HttpGet]
         public string Index(string id)
         {
@@ -22,6 +29,12 @@ namespace ApiDemoApp.Controllers
             {
                 return "Received nothing";
             }
+        }
+
+        [HttpPost]
+        public string GetFullName([FromQuery] string firstname,  [FromQuery] string lastname)
+        {
+            return homeServices.FullName(firstname,lastname);
         }
     }
 }

@@ -1,3 +1,5 @@
+using ApiDemoApp.Services;
+
 var builder = WebApplication.CreateBuilder(args);
 
 //Content 
@@ -12,7 +14,10 @@ builder.Services.AddControllers(options =>{
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
+
 builder.Services.AddSingleton<IDateTime, SystemDateTime>();
+builder.Services.AddScoped<IHomeServices, HomeServices>();
+
 
 var app = builder.Build();
 
@@ -21,7 +26,12 @@ if (app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
     app.UseSwagger();
-    app.UseSwaggerUI();
+
+    //Serve app to the app route    
+    app.UseSwaggerUI(options => {
+           options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+          options.RoutePrefix = string.Empty;
+    });
 }
 
 app.UseStatusCodePages();
