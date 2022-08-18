@@ -1,6 +1,13 @@
 using ApiDemoApp.Services;
+using Microsoft.EntityFrameworkCore;
 
-var builder = WebApplication.CreateBuilder(args);
+//Via code mention the environment details
+// var builder = WebApplication.CreateBuilder(new WebApplicationOptions{
+//     EnvironmentName = Environments.Production,
+// });
+
+var builder = WebApplication.CreateBuilder();
+
 
 //Content 
 // Add services to the container.
@@ -10,6 +17,9 @@ builder.Services.AddControllers(options =>{
     options.ReturnHttpNotAcceptable = true;        
 }).AddXmlSerializerFormatters();
 
+
+builder.Services.AddDbContext<TodoContext>(opt => opt.UseInMemoryDatabase(databaseName:"TodoList"));
+//Register db context services
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
@@ -26,12 +36,13 @@ if (app.Environment.IsDevelopment())
 {
     app.UseExceptionHandler("/Error");
     app.UseSwagger();
+    app.UseSwaggerUI();
 
-    //Serve app to the app route    
-    app.UseSwaggerUI(options => {
-           options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
-          options.RoutePrefix = string.Empty;
-    });
+    // //Serve app to the app route    
+    // app.UseSwaggerUI(options => {
+    //        options.SwaggerEndpoint("/swagger/v1/swagger.json", "v1");
+    //       options.RoutePrefix = string.Empty;
+    // });
 }
 
 app.UseStatusCodePages();

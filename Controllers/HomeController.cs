@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using ApiDemoApp.Filters;
 using ApiDemoApp.Services;
 using Microsoft.AspNetCore.Http;
 using Microsoft.AspNetCore.Mvc;
@@ -32,6 +33,7 @@ namespace ApiDemoApp.Controllers
         }
 
         [HttpPost]
+        [ResponseHeader("Filter-Header", "Filter Value")]
         public string GetFullName([FromQuery] string firstname,  [FromQuery] string lastname)
         {
             return homeServices.FullName(firstname,lastname);
